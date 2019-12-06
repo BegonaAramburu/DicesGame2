@@ -47,18 +47,10 @@ public class GameController {
 		game.setPlayer(player);
 		diceService.postDice(game);//return a List of dices
 		gameService.saveResultDicesInGame(game);//save result of dices sum
-		System.out.println("entro");
 		gameService.gameWinner(game);//save winner o lost game
-		System.out.println("entro????");
 		gameService.putGame(game);//save game in the repository
 		return game;//return a complet game
 	}
-
-	
-	
-	
-	
-	
 	
 	//Call for to ask a game by Id-----------Private-------------------------
 	@GetMapping("/games/{gameId}")
@@ -72,17 +64,7 @@ public class GameController {
 		return gameService.getAllGames();
 	}
 	
-/*	@DeleteMapping("/games/{gameId}")
-	public void deleteGame(@PathVariable long gameId) {
-		gameService.deleteGame(gameId);
-	}*/
-	
-
 }
-/*	//Call for to ask all games by player id----lo hago desde playercontrol--------------------------------
-@GetMapping("/players/{playerId}/games")
-public List<Game> getAllGamesByPlayerId(@PathVariable Long playerId){
-	return gameService.getAllGamesByPlayerId(playerId);
-}*/
+
 
 

@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class Player {
 	
-	
 	//--------------------------Properties--------------------------------------------------------------
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -39,34 +38,26 @@ public class Player {
 	private Date altaRegistro;
 	private Double succesRate;
 	
-	//@JsonManagedReference
 	@OneToMany(mappedBy = "player")//, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Game> games = new ArrayList<>();
 	
-
-	
-	
-
 	//--------------------------Constructors--------------------------------------------------------------
 
 	public Player() {
-		
 		altaRegistro = new Date();
-
 	}
 	
 	public Player(String playerName) {	
 		altaRegistro = new Date();
 		this.playerName = playerName;
-		
-		
 	}
 	
-	//--------------------------Set/Get--------------------------------------------------------------------
+	//--------------------------Setters/Getters--------------------------------------------------------------------
 
 	public String getPlayerName() {
 		return playerName;
 	}
+	
 	public void setPlayerName(String playerName) {
 		this.playerName = playerName;
 	}
@@ -102,8 +93,5 @@ public class Player {
 	public void setGames(List<Game> games) {
 		this.games = games;
 	}
-
-
-	
 	
 }

@@ -20,7 +20,7 @@ public class PlayerService {
 	@Autowired
 	private GameService gameService;
 	
-	//Create a Player with playerName: POST----------------------------------------------
+	//Create a Player with playerName: POST----------------------------------
 	public Player postPlayer(String playerName) {
 		if(playerName=="") {
 			playerName="anonymous";
@@ -43,14 +43,13 @@ public class PlayerService {
 		}
 	}
 
-	//Change namePlayer-------------------------------------------------
-		public Player putPlayer(Player player) {
-			playerRepository.save(player);
-			return player;
-		}
+	//Change namePlayer-------------------------------------------------------
+	public Player putPlayer(Player player) {
+		playerRepository.save(player);
+		return player;
+	}
 		
-	//Get por Id-------------------------------------------------
-	
+	//Get by Id---------------------------------------------------------------
 	public Player getPlayerById(Long playerId) {
 		Player player = null;
 		Optional<Player> playerOptional = playerRepository.findById(playerId);
@@ -62,25 +61,17 @@ public class PlayerService {
 		return player;
 	}
 
-	
-	
-	
-	
-	
-	
-	//Get all Players-------------------------------------------------
+	//Get all Players---------------------------------------------------------
 	public List<Player> getAllPlayers(){
 		return (List<Player>) playerRepository.findAll();
 	}
 	
-	
-	
-	//Delete player by Id-------------------------------------------------
+	//Delete player by Id-----------------------------------------------------
 	public void deletePlayerById(Long playerId) {
 		playerRepository.deleteById(playerId);
 	}
 
-	//Average suuces rate players-----------------------------------------
+	//Average suuces rate players---------------------------------------------
 	public double getRankingSucces() {
 		List<Player> players = getAllPlayers();
 		int succesAdd = 0;
@@ -92,7 +83,7 @@ public class PlayerService {
 		return averagesucces;
 	}
 	
-	//winner player----------------------------------------------------------
+	//winner player-----------------------------------------------------------
 	public Player getWinnerPlayer() {
 		List<Player> players = getAllPlayers();
 		Player winnerPlayer = players.get(0);
@@ -107,7 +98,7 @@ public class PlayerService {
 		return winnerPlayer;
 	}
 	
-	//loser player----------------------------------------------------------
+	//loser player-----------------------------------------------------------
 	public Player getLoserPlayer() {
 		List<Player> players = getAllPlayers();
 		Player loserPlayer = players.get(0);
@@ -122,26 +113,4 @@ public class PlayerService {
 		return loserPlayer;
 	}
 	
-	
-	
 }
-
-//Create a Player: POST----------------OK------------------------------
-/*	public String postPlayer(Player player) {
-	if(player.getPlayerName()=="") {
-		player.setPlayerName("anonymous");
-		playerRepository.save(player);
-		return "Player registrated as anonymous";
-	}else
-	playerRepository.save(player);
-	List<Player> sameName = new ArrayList<Player>();
-	sameName = playerRepository.findByPlayerName(player.getPlayerName());
-	if(sameName.size()>1) {
-		playerRepository.delete(player);
-		return "This name already exists";
-	}else {
-		playerRepository.save(player);
-		return "Player registrated";
-	}
-}	*/
-

@@ -21,9 +21,6 @@ public class GameService {
 	GameRepository gameRepository;
 	
 	@Autowired
-	PlayerRepository playerRepository;
-	
-	@Autowired
 	PlayerService playerService;
 	
 	@Autowired
@@ -37,17 +34,15 @@ public class GameService {
 		return game;
 	}
 		
-		
 	//me devuelve el game con el resultado de la suma de los dados by idgames
 	//y lo guardo en el game
 	public Game saveResultDicesInGame(Game game) {
 		game.setResultDices(diceService.getResultadoDicesByGameId(game.getGameId()));
-		System.out.println("que me salva aqui");
 		gameRepository.save(game);
 		return game;
 	}
 	
-	//Miro si el juego esta ganado o perdido----------------------------------------------
+	//Miro si el juego esta ganado o perdido-----------------------------
 	public Game gameWinner(Game game) {
 		Boolean winnerGame=false;
 		if(game.getNumDices()==2) {
@@ -67,13 +62,10 @@ public class GameService {
 				Dice dice=dices.get(i);
 				if(dice.getDiceFace()==5){
 					counter5++;
-					//game.setWinnerGame(true);
 				}
 				if(dice.getDiceFace()==6) {
 					counter6++;
-					//game.setWinnerGame(true);
 				}
-				
 			}
 			if(counter5==6 || counter6==6) {
 				game.setWinnerGame(true);
@@ -102,14 +94,12 @@ public class GameService {
 				contador++;
 			}else {contador=0;}
 		}
-		System.out.println(contador);
 		succesRate = (contador*100)/games.size();
-		System.out.println(succesRate);
 		return succesRate;
 	}
 	
 
-	//Delete all games by playerId: GET----------------------------------------------
+	//Delete all games by playerId: GET------------------------------------
 	public void deleteGamesByPlayerId(Long playerId){
 		try{
 			Player player = playerService.getPlayerById(playerId);
@@ -125,10 +115,8 @@ public class GameService {
 		    System.out.println ("El error es: " + e.getMessage());
 		    e.printStackTrace();
 		}
-		
 	}
 
-	
 	//Ask a game by Id: GET----------------private------------------------------
 	public Game getGameById(Long gameId) {
 		Game game = null;
@@ -146,6 +134,4 @@ public class GameService {
 		return (List<Game>) gameRepository.findAll();	
 	}
 	
-	
-
 }
