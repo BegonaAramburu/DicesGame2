@@ -19,22 +19,6 @@ public class DiceService {
 	
 	@Autowired
 	GameService gameService;
-	
-	//Crea los dados, los añade a un arrayList de dados y los guarda en el repository
-		/*public ArrayList<Dice> postDice(Game game) { 
-			
-			ArrayList<Dice> dices = new ArrayList<>();
-			for (int i = 0; i < game.getNumDices(); i++) {
-				Dice dice = new Dice(game.getGameId()); 
-				dices.add(dice); 
-				dicesRepository.save(dice);
-			}
-			//game.setDices(dices);
-			
-			return dices;			
-		}
-		*/
-		
 		
 	//Crea los dados, los añade a un arrayList de dados y los guarda en el repository
 	public ArrayList<Dice> postDice(Game game) { 
@@ -50,9 +34,6 @@ public class DiceService {
 		return dices;			
 	}
 	
-
-	
-
 	//devuelveme el resultado de la suma de los dados por idgame: GET----------------------------------------------
 	public Integer getResultadoDicesByGameId(Long gameId){
 		List<Dice> dices = new ArrayList<>();
@@ -80,6 +61,5 @@ public class DiceService {
 			dicesRepository.delete(d);
 		}
 	}
-	
 
 }
