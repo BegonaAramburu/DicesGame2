@@ -20,36 +20,49 @@ public class PlayerService {
 	@Autowired
 	private GameService gameService;
 	
-	//Create a Player with playerName: POST----------------------------------
-	public Player postPlayer(String playerName) {
+	//Create a playerId with a playerName:POST------------------------------
+	public Long postPlayerId(String playerName) {
+		Player player = null;
 		if(playerName=="") {
-			playerName="anonymous";
-			Player player = new Player("anonymous");
-			playerRepository.save(player);
-			System.out.println("Player registrated as anonymous");
-			return player;
+			player = new Player("anonymous");
+			playerRepository.save(player);	
 		}else {
-			Player player = new Player(playerName);
-			playerRepository.save(player);
-			List<Player> sameName = new ArrayList<>();
-			sameName = playerRepository.findByPlayerName(playerName);
-			
-			if(sameName.size()>1) {
-				playerRepository.delete(player);
+			List<Player> players = new ArrayList<>();
+			player = new Player(playerName);
+			players = playerRepository.findByPlayerName(playerName);
+			if(players.size() >= 1) {
 				System.out.println("This name already exists");
-			}else {playerRepository.save(player);
+			}else {
+				playerRepository.save(player);
 			}
-			return player;
 		}
+		return player.getPlayerId();
 	}
-
+	
 	//Change namePlayer-------------------------------------------------------
 	public Player putPlayer(Player player) {
-		playerRepository.save(player);
+		
+		if(player.getPlayerName()=="") {
+			player.setPlayerName("anonymous");
+			playerRepository.save(player);
+		}else {
+			List<Player> players = new ArrayList<>();
+			players = playerRepository.findByPlayerName(player.getPlayerName());
+			if(players.size() == 1) {
+				System.out.println("This name already exists");
+			}else {
+				playerRepository.save(player);
+			}	
+		}
 		return player;
 	}
+	
+	//Get all Players---------------------------------------------------------
+	public List<Player> getAllPlayers(){
+		return (List<Player>) playerRepository.findAll();
+	}
 		
-	//Get by Id---------------------------------------------------------------
+	//Get Player by playerId--------------------------------------------------
 	public Player getPlayerById(Long playerId) {
 		Player player = null;
 		Optional<Player> playerOptional = playerRepository.findById(playerId);
@@ -60,26 +73,39 @@ public class PlayerService {
 		}
 		return player;
 	}
-
-	//Get all Players---------------------------------------------------------
-	public List<Player> getAllPlayers(){
-		return (List<Player>) playerRepository.findAll();
+	
+	//Get succesRate of games by playerId-------------------------------------
+	public Player createSuccesRate(Long playerId) {
+		Player player = getPlayerById(playerId);
+		List<Game> games = player.getGames();
+		int contador=0;
+		double succesRate = 0.0;
+		for(int i=0; i<games.size(); i++) {
+			if(games.get(i).getWinnerGame()==true) {
+				contador++;
+			}
+		}
+		succesRate = (contador*100)/games.size();
+		player.setSuccesRate(succesRate);
+		playerRepository.save(player);
+		return player;
 	}
 	
 	//Delete player by Id-----------------------------------------------------
 	public void deletePlayerById(Long playerId) {
-		playerRepository.deleteById(playerId);
+		Player player = getPlayerById(playerId);
+		playerRepository.delete(player);
 	}
-
+	
 	//Average suuces rate players---------------------------------------------
 	public double getRankingSucces() {
 		List<Player> players = getAllPlayers();
-		int succesAdd = 0;
+		int counter = 0;
 		for (int i = 0; i < players.size(); i++) {
 			Player p = players.get(i);
-			succesAdd += p.getSuccesRate(); 
+			counter += p.getSuccesRate(); 
 		}
-		double averagesucces = succesAdd/players.size();
+		double averagesucces = counter/players.size();
 		return averagesucces;
 	}
 	

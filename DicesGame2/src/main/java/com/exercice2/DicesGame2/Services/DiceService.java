@@ -19,47 +19,63 @@ public class DiceService {
 	
 	@Autowired
 	GameService gameService;
-		
-	//Crea los dados, los añade a un arrayList de dados y los guarda en el repository
-	public ArrayList<Dice> postDice(Game game) { 
-		
+	
+	//Post dices by gameId-------------------------------------------
+	public ArrayList<Dice> postDice(Long gameId) { 
+		Game game = gameService.getGameById(gameId);
 		ArrayList<Dice> dices = new ArrayList<>();
 		for (int i = 0; i < game.getNumDices(); i++) {
 			Dice dice = new Dice(game);
 			dices.add(dice); 
 			dicesRepository.save(dice);
 		}
-		game.setDices(dices);
-		
 		return dices;			
 	}
-	
-	//devuelveme el resultado de la suma de los dados por idgame: GET----------------------------------------------
-	public Integer getResultadoDicesByGameId(Long gameId){
-		List<Dice> dices = new ArrayList<>();
-		dices = dicesRepository.findByGameGameId(gameId);
-		Integer resultDices = 0;
+		
+	//Get result dices sum-------------------------------------------
+	public Integer getResultDicesByGameId(Long gameId){
+		Game game = gameService.getGameById(gameId);
+		List<Dice> dices = game.getDices();
+		int counter = 0;
 		for (int i = 0; i < dices.size(); i++) {
 			Dice dice=dices.get(i);
-			resultDices += dice.getDiceFace();
+			counter += dice.getDiceFace();
 		}
-		System.out.println(resultDices);
-		return resultDices;
-	}
-
-	//lo necesito para el gameWinner------------------------------
-	public List<Dice> getAllDicesbyId(Long gameId) {
-		return dicesRepository.findByGameGameId(gameId);
+		game.setResultDices(counter);
+		return game.getResultDices();
 	}
 	
-	//delete dices by gameId
-	public void deleteDices(Long gameId) {
+	//Return winner (true) or loser(false) by gameId-----------------
+	public Boolean gameWinner(Long gameId) {
 		Game game = gameService.getGameById(gameId);
-		List <Dice> dices = game.getDices();
-		for (int i = 0; i < dices.size(); i++) {
-			Dice d = dices.get(i);
-			dicesRepository.delete(d);
+		Boolean winnerGame = game.getWinnerGame();
+		if(game.getNumDices()==2) {
+			if(game.getResultDices()==7) {
+				game.setWinnerGame(true);	
+			}else {
+				game.setWinnerGame(false);
+			}
 		}
+		if(game.getNumDices()==6) {
+			List<Dice> dices = game.getDices();
+			int counter5 = 0;
+			int counter6 = 0;
+			for(int i=0; i<dices.size(); i++) {
+				Dice dice=dices.get(i);
+				if(dice.getDiceFace()==5){
+					counter5++;
+				}
+				if(dice.getDiceFace()==6) {
+					counter6++;
+				}
+			}
+			if(counter5==6 || counter6==6) {
+				game.setWinnerGame(true);
+			}else {
+				game.setWinnerGame(false);
+			}
+		}
+		return game.getWinnerGame();
 	}
 
 }

@@ -29,28 +29,35 @@ public class PlayerController {
 	
 	//--------------------------------------Calls--------------------------------------------------------
 	
-	//Create player only with name------------------------------------
-	@PostMapping("/players/{playerName}")
-	public Player postPlayer(@PathVariable String playerName) {
-		return playerService.postPlayer(playerName);
+	//Call for to have a playerId: POST--------------------------------
+	@PostMapping("/players")
+	public Long createPlayerId(@RequestBody Player player) {
+		return playerService.postPlayerId(player.getPlayerName()); 
 	}
-
+	
 	//Call for change namePlayer--------------------------------------
 	@PutMapping("/players")
 	public Player putPlayer(@RequestBody Player player) {
-		playerService.putPlayer(player);
-		return player;
+		return playerService.putPlayer(player);
 	}
 	
+	//Call for to get all players--------------------------------------
+	@GetMapping("/players")
+	public List<Player> getAllPlayers(){
+		return playerService.getAllPlayers();
+	}
+
 	//Call for to ask all games by player id---------------------------
 	@GetMapping("/players/{playerId}/games")
 	public Player getAllGamesByPlayerId(@PathVariable Long playerId){
-		Player player = playerService.getPlayerById(playerId);
-		player.getGames();
-		player.setSuccesRate(gameService.createSuccesRate(playerId));
-		player.getSuccesRate();
-		playerService.putPlayer(player);
-		return player;
+		return playerService.createSuccesRate(playerId);
+	}
+		
+	//Call for delete player by Id------------------------------------
+	@DeleteMapping("/players/{playerId}")
+	public String DeletePlayerById(@PathVariable Long playerId) {
+		playerService.deletePlayerById(playerId);
+		return "Player deleted";
 	}
 
 	//Call for to delete all games by player id------------------------
@@ -58,12 +65,6 @@ public class PlayerController {
 	public String DeleteAllGamesByPlayerId(@PathVariable Long playerId) {
 		gameService.deleteGamesByPlayerId(playerId);
 		return "Games deleted by player " + playerId;
-	}
-
-	//Call for to get all players--------------------------------------
-	@GetMapping("/players")
-	public List<Player> getAllPlayers(){
-		return playerService.getAllPlayers();
 	}
 	
 	//Call for average succes player ranking---------------------------
@@ -79,24 +80,11 @@ public class PlayerController {
 	}
 	
 	//Call the loser player-------------------------------------------
-		@GetMapping("players/ranking/loser")
-		public Player getLoserPlayer() {
-			return playerService.getLoserPlayer();
-		}
-		
-	//Call for delete player by Id------------------------------------
-	@DeleteMapping("/players/{playerId}")
-	public String DeletePlayerById(@PathVariable Long playerId) {
-		playerService.deletePlayerById(playerId);
-		return "Player deleted";
+	@GetMapping("players/ranking/loser")
+	public Player getLoserPlayer() {
+		return playerService.getLoserPlayer();
 	}
-	
-	//Call for to get a player by playerId------------------------------------
-	/*@GetMapping("/players/{playerId}")
-	public Optional<Player> getPlayerById(@PathVariable Long playerId) {
-		return playerService.getPlayerById(playerId);
-	}*/
-	
+
 }
 
 

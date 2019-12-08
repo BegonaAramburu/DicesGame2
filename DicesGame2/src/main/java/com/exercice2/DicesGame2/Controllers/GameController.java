@@ -25,13 +25,7 @@ public class GameController {
 	
 	@Autowired
 	GameService gameService;
-	
-	@Autowired
-	DiceService diceService;
-	
-	@Autowired
-	PlayerService playerService;
-	
+		
 	//--------------------------------------Calls--------------------------------------------------------
 	
 	//Call for to create a game------------------------------------
@@ -41,29 +35,11 @@ public class GameController {
 	}
 		
 	//Call for play. ----------------------------------------------
-	@PutMapping("/players/{playerId}/games")
-	public Game playGame(@RequestBody Game game, @PathVariable Long playerId) {
-		Player player = playerService.getPlayerById(playerId);
-		game.setPlayer(player);
-		diceService.postDice(game);//return a List of dices
-		gameService.saveResultDicesInGame(game);//save result of dices sum
-		gameService.gameWinner(game);//save winner o lost game
-		gameService.putGame(game);//save game in the repository
-		return game;//return a complet game
+	@PutMapping("/players/games/{gameId}")
+	public Game playGame(@PathVariable Long gameId) {
+		return gameService.dicesPlay(gameId);
 	}
-	
-	//Call for to ask a game by Id-----------Private-------------------------
-	@GetMapping("/games/{gameId}")
-	public Game getGameById(@PathVariable Long gameId) {
-		return gameService.getGameById(gameId);
-	}
-	
-	//Call for to ask all games-----------PARA NADA-------------------------
-	@GetMapping("/games")
-	public List<Game> getAllGames(){
-		return gameService.getAllGames();
-	}
-	
+
 }
 
 

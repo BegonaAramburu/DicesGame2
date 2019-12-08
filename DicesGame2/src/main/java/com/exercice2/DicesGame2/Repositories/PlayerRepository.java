@@ -12,5 +12,5 @@ import com.exercice2.DicesGame2.Domains.Player;
 public interface PlayerRepository extends JpaRepository<Player, Long>{
 
 	public List<Player> findByPlayerName(String playerName);
-
+	
 }
